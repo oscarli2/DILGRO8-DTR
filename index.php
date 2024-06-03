@@ -34,7 +34,7 @@
                     $end_date = $_POST['end_date'];
 
                     try {
-                        // Convert dates to strings in 'YYYY-MM-DD' format
+                        // Convert dates to strings in 'YYYY-MM-DD' format test
                         $start_date = date('Y-m-d', strtotime($start_date));
                         $end_date = date('Y-m-d', strtotime($end_date));
 
