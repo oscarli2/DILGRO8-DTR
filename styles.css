@@ -55,6 +55,7 @@ form label {
 
 form input[type="number"],
 form input[type="date"],
+form select,
 form input[type="submit"] {
     padding: 10px;
     font-size: 16px;

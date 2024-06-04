@@ -12,8 +12,21 @@
         <div class="container">
             <div class="form-container">
                 <form method="POST" action="index.php">
-                    <label for="user_id">User ID:</label>
-                    <input type="number" id="user_id" name="user_id" required>
+                    <label for="user_id">Employee:</label>
+                    <select id="user_id" name="user_id" required>
+                        <option value="">Select User</option>
+                        <?php
+                        include 'db_connection.php';
+                        try {
+                            $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name COLLATE Latin1_General_CI_AS ASC"); 
+                            while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\">" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                            }
+                        } catch (PDOException $e) {
+                            echo "<option value=\"\">Error loading users</option>";
+                        }
+                        ?>
+                    </select>
                     
                     <label for="start_date">Start Date:</label>
                     <input type="date" id="start_date" name="start_date" required>
@@ -27,14 +40,12 @@
             <div class="table-container">
                 <?php
                 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                    include 'db_connection.php';
-
                     $user_id = $_POST['user_id'];
                     $start_date = $_POST['start_date'];
                     $end_date = $_POST['end_date'];
 
                     try {
-                        // Convert dates to strings in 'YYYY-MM-DD' format test
+                        // Convert dates to strings in 'YYYY-MM-DD' format
                         $start_date = date('Y-m-d', strtotime($start_date));
                         $end_date = date('Y-m-d', strtotime($end_date));
 
@@ -79,6 +90,7 @@
                         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($results) {
+                            echo "<h4>Employee Name</h4>";
                             echo "<table>";
                             echo "<tr><th>Date</th><th>Arrival AM</th><th>Departure AM</th><th>Arrival PM</th><th>Departure PM</th></tr>";
                             foreach ($results as $row) {
