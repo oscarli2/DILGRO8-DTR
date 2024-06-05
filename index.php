@@ -5,10 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Records</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        .logout-button{
+            background-color: #b62424 !important;
+        }
+    </style>
 </head>
 <body>
+    <?php
+    session_start();
+    if (!isset($_SESSION['userid'])) {
+        header("Location: login.php");
+        exit;
+    }
+    ?>
     <div class="main-container">
-        <h1>View Attendance Records</h1>
+        <div class="logout">
+            <h1>View Attendance Records</h1>    
+                <div class="logout-form"> 
+                    <form method="POST" action="logout.php">
+                        <input class="logout-button" type="submit" value="Logout">
+                    </form>
+                </div>   
+            </div>
         <div class="container">
             <div class="form-container">
                 <form method="POST" action="index.php">
@@ -17,14 +36,27 @@
                         <option value="">Select User</option>
                         <?php
                         include 'db_connection.php';
-                        try {
-                            $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name COLLATE Latin1_General_CI_AS ASC"); 
-                            while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\">" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                        session_start();
+                        $logged_in_user_id = $_SESSION['userid'] ?? null;
+                        $logged_in_user_admin = $_SESSION['admin'] ?? null;
+                        if ($logged_in_user_admin > 0) {                              
+                            try {
+                                $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name ASC"); 
+                                while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
+                                    $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
+                                    echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                }
+                            } catch (PDOException $e) {
+                                echo "<option value=\"\">Error loading users</option>";
                             }
-                        } catch (PDOException $e) {
-                            echo "<option value=\"\">Error loading users</option>";
-                        }
+                        }else{
+                            $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
+                            $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo WHERE Userid = '" . $logged_in_user_id ."'"); 
+                            while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
+                                $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
+                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                            }
+                        };                       
                         ?>
                     </select>
                     
@@ -90,7 +122,6 @@
                         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                         if ($results) {
-                            echo "<h4>Employee Name</h4>";
                             echo "<table>";
                             echo "<tr><th>Date</th><th>Arrival AM</th><th>Departure AM</th><th>Arrival PM</th><th>Departure PM</th></tr>";
                             foreach ($results as $row) {
