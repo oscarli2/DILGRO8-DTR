@@ -6,7 +6,7 @@
     <title>Attendance Records</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        .logout-button{
+        .logout-button {
             background-color: #b62424 !important;
         }
     </style>
@@ -22,12 +22,13 @@
     <div class="main-container">
         <div class="logout">
             <h1>View Attendance Records</h1>    
-                <div class="logout-form"> 
-                    <form method="POST" action="logout.php">
-                        <input class="logout-button" type="submit" value="Logout">
-                    </form>
-                </div>   
-            </div>
+            <div class="logout-form"> 
+                <form method="POST" action="logout.php">
+                    <input class="logout-button" type="submit" value="Logout">
+                </form>
+                <button onclick="window.print()">Print</button>
+            </div>   
+        </div>
         <div class="container">
             <div class="form-container">
                 <form method="POST" action="index.php">
@@ -36,7 +37,6 @@
                         <option value="">Select User</option>
                         <?php
                         include 'db_connection.php';
-                        session_start();
                         $logged_in_user_id = $_SESSION['userid'] ?? null;
                         $logged_in_user_admin = $_SESSION['admin'] ?? null;
                         if ($logged_in_user_admin > 0) {                              
@@ -49,14 +49,14 @@
                             } catch (PDOException $e) {
                                 echo "<option value=\"\">Error loading users</option>";
                             }
-                        }else{
+                        } else {
                             $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
                             $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo WHERE Userid = '" . $logged_in_user_id ."'"); 
                             while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
                                 $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
                                 echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
                             }
-                        };                       
+                        }                       
                         ?>
                     </select>
                     
@@ -77,16 +77,13 @@
                     $end_date = $_POST['end_date'];
 
                     try {
-                        // Convert dates to strings in 'YYYY-MM-DD' format
                         $start_date = date('Y-m-d', strtotime($start_date));
                         $end_date = date('Y-m-d', strtotime($end_date));
 
                         $sql = "SET NOCOUNT ON;
 
-                        -- Disable foreign key checks
                         EXEC sp_msforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT ALL';
                 
-                        -- Your original CTE and main query
                         WITH date_ranges AS (
                             SELECT CAST(? AS DATE) AS dt
                             UNION ALL
@@ -108,7 +105,6 @@
                         GROUP BY 
                             date_ranges.dt;
                 
-                        -- Enable foreign key checks
                         EXEC sp_msforeachtable 'ALTER TABLE ? CHECK CONSTRAINT ALL'";
 
                         $stmt = $conn->prepare($sql);
