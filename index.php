@@ -44,7 +44,7 @@
                                 $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name ASC"); 
                                 while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
                                     $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
-                                    echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                    echo "<option value=\"" . ($user['Userid']) . "\" $selected>" . ($user['Userid']) . " - " . $user['Name'] . "</option>";
                                 }
                             } catch (PDOException $e) {
                                 echo "<option value=\"\">Error loading users</option>";
@@ -54,7 +54,7 @@
                             $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo WHERE Userid = '" . $logged_in_user_id ."'"); 
                             while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
                                 $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
-                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                echo "<option value=\"" . ($user['Userid']) . "\" $selected>" . ($user['Userid']) . " - " . $user['Name'] . "</option>";
                             }
                         }                       
                         ?>
