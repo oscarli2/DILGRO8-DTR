@@ -96,7 +96,7 @@
                             MAX(CASE WHEN T.Checktype = 0 AND T.Userid = ? AND CAST(T.Checktime AS TIME) BETWEEN '03:00:00' AND '11:59:00' THEN FORMAT(T.Checktime, 'h:mm tt') END) AS ArrivalAM,
                             MIN(CASE WHEN T.Checktype = 1 AND T.Userid = ? AND CAST(T.Checktime AS TIME) BETWEEN '12:00:00' AND '14:00:00' THEN FORMAT(T.Checktime, 'h:mm tt') END) AS DepartAM,
                             MAX(CASE WHEN T.Checktype = 0 AND T.Userid = ? AND CAST(T.Checktime AS TIME) BETWEEN '12:00:00' AND '14:00:00' THEN FORMAT(T.Checktime, 'h:mm tt') END) AS ArrivalPM,
-                            MAX(CASE WHEN T.Checktype = 1 AND T.Userid = ? AND CAST(T.Checktime AS TIME) BETWEEN '15:00:01' AND '23:59:00' THEN FORMAT(T.Checktime, 'h:mm tt') END) AS DepartPM,
+                            MAX(CASE WHEN T.Checktype = 1 AND T.Userid = ? AND CAST(T.Checktime AS TIME) BETWEEN '14:00:01' AND '23:59:00' THEN FORMAT(T.Checktime, 'h:mm tt') END) AS DepartPM,
                             DATEPART(WEEKDAY, date_ranges.dt) AS Weekend
                         FROM 
                             date_ranges
