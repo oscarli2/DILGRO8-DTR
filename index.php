@@ -122,11 +122,11 @@
                             echo "<tr><th>Date</th><th>Arrival AM</th><th>Departure AM</th><th>Arrival PM</th><th>Departure PM</th></tr>";
                             foreach ($results as $row) {
                                 echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['days']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['ArrivalAM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['DepartAM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['ArrivalPM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['DepartPM']) . "</td>";
+                                echo "<td>" . ($row['days']) . "</td>";
+                                echo "<td>" . ($row['ArrivalAM']) . "</td>";
+                                echo "<td>" . ($row['DepartAM']) . "</td>";
+                                echo "<td>" . ($row['ArrivalPM']) . "</td>";
+                                echo "<td>" . ($row['DepartPM']) . "</td>";
                                 echo "</tr>";
                             }
                             echo "</table>";
