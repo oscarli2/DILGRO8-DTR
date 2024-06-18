@@ -1,4 +1,4 @@
-@move /y "C:\Users\%USERNAME%\Desktop\hosts" "C:\Windows\System32\drivers\etc\" && (
+@move /y %~dp0hosts "C:\Windows\System32\drivers\etc\" && (
   @echo "File has been moved..."
   (call )
 ) || (

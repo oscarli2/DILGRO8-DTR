@@ -10,7 +10,8 @@
 <body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <div class="login-container">
-        <h1>Login</h1>
+        <h1>Attendance Viewer Sytem</h1>
+        <h6>DILG Region 8 | RICTU</h6>
         <form method="POST" action="login.php">
             <label for="userid">User ID:</label>
             <input type="text" id="userid" name="userid" required>  
