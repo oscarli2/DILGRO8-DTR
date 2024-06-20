@@ -4,10 +4,10 @@ include 'db_connection.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_POST['insert_user_id'];
     $record_date = $_POST['record_date'];
-    $arrival_am = $_POST['arrival_am'] ? $_POST['record_date'] . ' ' . $_POST['arrival_am'] : null;
-    $depart_am = $_POST['depart_am'] ? $_POST['record_date'] . ' ' . $_POST['depart_am'] : null;
-    $arrival_pm = $_POST['arrival_pm'] ? $_POST['record_date'] . ' ' . $_POST['arrival_pm'] : null;
-    $depart_pm = $_POST['depart_pm'] ? $_POST['record_date'] . ' ' . $_POST['depart_pm'] : null;
+    $arrival_am = date_format($_POST['record_date'],"Y-m-d") . ' ' . date_format($_POST['arrival_am'],"H:i:s");
+    $depart_am = date_format($_POST['record_date'],"Y-m-d") . ' ' . date_format($_POST['depart_am'],"H:i:s");
+    $arrival_pm = date_format($_POST['record_date'],"Y-m-d") . ' ' . date_format($_POST['arrival_pm'],"H:i:s");
+    $depart_pm = date_format($_POST['record_date'],"Y-m-d") . ' ' . date_format($_POST['depart_pm'],"H:i:s");
 
     try {
         $conn->beginTransaction();
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         $conn->commit();
-        header("Location: index.php");
+        header("Location: secret.php");
         exit;
     } catch (PDOException $e) {
         $conn->rollBack();

@@ -31,7 +31,7 @@
         </div>
         <div class="container">
             <div class="form-container">
-                <form method="POST" action="index.php">
+                <form method="POST" action="secret.php">
                     <label for="user_id">Employee:</label>
                     <select id="user_id" name="user_id" required>
                         <option value="">Select User</option>
@@ -44,7 +44,7 @@
                                 $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name ASC"); 
                                 while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
                                     $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
-                                    echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                    echo "<option value=\"" . ($user['Userid']) . "\" $selected>" . ($user['Userid']) . " - " . $user['Name'] . "</option>";
                                 }
                             } catch (PDOException $e) {
                                 echo "<option value=\"\">Error loading users</option>";
@@ -53,7 +53,7 @@
                             $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo WHERE Userid = '" . $logged_in_user_id ."'"); 
                             while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
                                 $selected = ($user['Userid'] == $logged_in_user_id) ? 'selected' : '';
-                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\" $selected>" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                echo "<option value=\"" . ($user['Userid']) . "\" $selected>" . ($user['Userid']) . " - " . $user['Name'] . "</option>";
                             }
                         }                       
                         ?>
@@ -78,14 +78,14 @@
                         try {
                             $userQuery = $conn->query("SELECT Userid, Name FROM Userinfo ORDER BY Name ASC");
                             while ($user = $userQuery->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<option value=\"" . htmlspecialchars($user['Userid']) . "\">" . htmlspecialchars($user['Userid']) . " - " . $user['Name'] . "</option>";
+                                echo "<option value=\"" . ($user['Userid']) . "\">" . ($user['Userid']) . " - " . $user['Name'] . "</option>";
                             }
                         } catch (PDOException $e) {
                             echo "<option value=\"\">Error loading users</option>";
                         }
                         ?>
                     </select>
-
+                    
                     <label for="record_date">Date:</label>
                     <input type="date" id="record_date" name="record_date" required>
                     
@@ -102,6 +102,7 @@
                     <input type="time" id="depart_pm" name="depart_pm">
 
                     <input type="submit" value="Insert Record">
+
                 </form>
             </div>
             <div class="table-container">
@@ -157,11 +158,11 @@
                             echo "<tr><th>Date</th><th>Arrival AM</th><th>Departure AM</th><th>Arrival PM</th><th>Departure PM</th></tr>";
                             foreach ($results as $row) {
                                 echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['days']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['ArrivalAM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['DepartAM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['ArrivalPM']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['DepartPM']) . "</td>";
+                                echo "<td>" . ($row['days']) . "</td>";
+                                echo "<td>" . ($row['ArrivalAM']) . "</td>";
+                                echo "<td>" . ($row['DepartAM']) . "</td>";
+                                echo "<td>" . ($row['ArrivalPM']) . "</td>";
+                                echo "<td>" . ($row['DepartPM']) . "</td>";
                                 echo "</tr>";
                             }
                             echo "</table>";
