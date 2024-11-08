@@ -1,6 +1,13 @@
 <?php
 include 'db_connection.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+// Database connection using PDO for SQL Server
+// Rest of the code follows...
+
 // Query to get the count and details of employees currently logged in
 $sql = "
     SELECT COUNT(DISTINCT emp.Userid) AS count, 
