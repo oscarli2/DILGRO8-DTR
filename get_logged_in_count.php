@@ -1,62 +1,53 @@
 <?php
-// Database connection parameters for SQL Server
-$host = "sqlsrv:Server=26.93.45.191;Database=anviz";
+// Database connection
+$host = "26.93.45.191";
 $username = "sa";
 $password = "CDPabina";
+$dbname = "anviz";
 
-try {
-    // Create PDO instance for SQL Server connection
-    $conn = new PDO($host, $username, $password);
-    
-    // Set PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // SQL query to get the count and details of employees currently logged in
-    $sql = "
-        SELECT COUNT(DISTINCT emp.Userid) AS count, 
-               u.Name AS employee_name,
-               d.DeptName AS department_name
-        FROM Checkinout emp
-        JOIN (
-            SELECT Userid, MAX(Checktime) AS LatestCheck
-            FROM Checkinout
-            GROUP BY Userid
-        ) latest ON emp.Userid = latest.Userid AND emp.Checktime = latest.LatestCheck
-        JOIN Userinfo u ON emp.Userid = u.Userid
-        LEFT JOIN Dept d ON u.Deptid = d.Deptid
-        WHERE emp.Checktype = 0
-        GROUP BY emp.Userid;
-    ";
+$conn = new mysqli($host, $username, $password, $dbname);
 
-    // Prepare the query
-    $stmt = $conn->prepare($sql);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-    // Execute the query
-    $stmt->execute();
+// Query to get the count and details of employees currently logged in a
+$sql = "
+    SELECT COUNT(DISTINCT emp.Userid) AS count, 
+           u.Name AS employee_name,
+           d.DeptName AS department_name
+    FROM Checkinout emp
+    JOIN (
+        SELECT Userid, MAX(Checktime) AS LatestCheck
+        FROM Checkinout
+        GROUP BY Userid
+    ) latest ON emp.Userid = latest.Userid AND emp.Checktime = latest.LatestCheck
+    JOIN Userinfo u ON emp.Userid = u.Userid
+    LEFT JOIN Dept d ON u.Deptid = d.Deptid
+    WHERE emp.Checktype = 0
+    GROUP BY emp.Userid, u.Name, d.DeptName;
+";
 
-    // Initialize the response array
-    $response = [
-        'count' => 0,
-        'employees' => []
-    ];
+$result = $conn->query($sql);
 
-    // Fetch results
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $response['count'] = $stmt->rowCount(); // Count the number of logged-in employees
+// Prepare the response
+$response = [
+    'count' => 0,
+    'employees' => []
+];
+
+if ($result) {
+    $response['count'] = $result->num_rows; // Count the number of logged-in employees
+    while ($row = $result->fetch_assoc()) {
         $response['employees'][] = [
             'name' => $row['employee_name'],
             'department' => $row['department_name']
         ];
     }
-
-    // Return the result as JSON
-    echo json_encode($response);
-
-} catch (PDOException $e) {
-    // Catch any errors and return them as JSON
-    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
 }
 
-// Close the connection
-$conn = null;
+// Return the result as JSON
+echo json_encode($response);
+
+$conn->close();
 ?>
