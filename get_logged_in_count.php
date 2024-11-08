@@ -40,7 +40,7 @@ $sql = "
     JOIN Userinfo u ON emp.Userid = u.Userid
     LEFT JOIN Dept d ON u.Deptid = d.Deptid
     WHERE emp.Checktype = 0
-    GROUP BY emp.Userid;
+    GROUP BY emp.Userid, u.Name, d.DeptName;
 ";
 
 try {
