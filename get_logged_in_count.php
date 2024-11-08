@@ -11,26 +11,43 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query to count employees with the latest record as Time-in (Checktype = 0)
+// Query to get the count and details of employees currently logged in
 $sql = "
-    SELECT COUNT(DISTINCT Userid) AS count
+    SELECT COUNT(DISTINCT emp.Userid) AS count, 
+           u.Name AS employee_name,
+           d.DeptName AS department_name
     FROM Checkinout emp
     JOIN (
-        SELECT id, MAX(Checktime) as LatestCheck
+        SELECT Userid, MAX(Checktime) AS LatestCheck
         FROM Checkinout
-        GROUP BY id
-    ) latest ON Userid = latest.id AND emp.Checktime = latest.LatestCheck
-    WHERE emp.Checktype = 0;
+        GROUP BY Userid
+    ) latest ON emp.Userid = latest.Userid AND emp.Checktime = latest.LatestCheck
+    JOIN Userinfo u ON emp.Userid = u.Userid
+    LEFT JOIN Dept d ON u.Deptid = d.Deptid
+    WHERE emp.Checktype = 0
+    GROUP BY emp.Userid;
 ";
 
 $result = $conn->query($sql);
 
+// Prepare the response
+$response = [
+    'count' => 0,
+    'employees' => []
+];
+
 if ($result) {
-    $row = $result->fetch_assoc();
-    echo json_encode($row);
-} else {
-    echo json_encode(['count' => 0]); // Fallback if query fails
+    $response['count'] = $result->num_rows; // Count the number of logged-in employees
+    while ($row = $result->fetch_assoc()) {
+        $response['employees'][] = [
+            'name' => $row['employee_name'],
+            'department' => $row['department_name']
+        ];
+    }
 }
+
+// Return the result as JSON
+echo json_encode($response);
 
 $conn->close();
 ?>
