@@ -1,15 +1,20 @@
 <?php
-// Database connection
-$host = "26.93.45.191";
-$username = "sa";
-$password = "CDPabina";
-$dbname = "anviz";
+// Use any of these or check the exact MSSQL ODBC driver name in "ODBC Data Source Administrator"
+$mssqldriver = '{ODBC Driver 11 for SQL Server}';
 
-$conn = new mysqli($host, $username, $password, $dbname);
+$hostname = '172.20.72.124';
+$dbname = 'anviz';
+$username = 'sa';
+$password = 'CDPabina';
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+try {
+    $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);
+    // Set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
 }
+
 
 // Query to get the count and details of employees currently logged in a
 $sql = "
