@@ -11,7 +11,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Query to get the count and details of employees currently logged in
+// Query to get the count and details of employees currently logged in a
 $sql = "
     SELECT COUNT(DISTINCT emp.Userid) AS count, 
            u.Name AS employee_name,
