@@ -1,19 +1,18 @@
 <?php
-// Database connection using PDO for SQL Server
-$host = "26.93.45.191";
-$username = "sa";
-$password = "CDPabina";
-$dbname = "anviz";
+// Use any of these or check the exact MSSQL ODBC driver name in "ODBC Data Source Administrator"
+$mssqldriver = '{ODBC Driver 11 for SQL Server}';
+
+$hostname = '172.20.72.124';
+$dbname = 'anviz';
+$username = 'sa';
+$password = 'CDPabina';
 
 try {
-    // Create PDO connection for SQL Server
-    $conn = new PDO("sqlsrv:Server=$host;Database=$dbname", $username, $password);
+    $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);
     // Set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    // If connection fails, return a JSON error message
-    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
-    exit();
+} catch(PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
 }
 
 // Query to get the count and details of employees currently logged in
