@@ -1,19 +1,5 @@
 <?php
-// Use any of these or check the exact MSSQL ODBC driver name in "ODBC Data Source Administrator"
-$mssqldriver = '{ODBC Driver 11 for SQL Server}';
-
-$hostname = '172.20.72.124';
-$dbname = 'anviz';
-$username = 'sa';
-$password = 'CDPabina';
-
-try {
-    $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);
-    // Set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
-}
+include 'db_connection.php';
 
 // Query to get the count and details of employees currently logged in
 $sql = "
@@ -36,9 +22,16 @@ try {
     // Execute the query
     $stmt = $conn->query($sql);
     
+    // Check if there are results
+    if ($stmt === false) {
+        // Query failed
+        echo json_encode(['error' => 'Query failed to execute.']);
+        exit();
+    }
+
     // Fetch all results
     $employees = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     // Prepare the response
     $response = [
         'count' => count($employees), // Total logged-in employees
@@ -53,5 +46,6 @@ try {
     exit();
 }
 
+// Close the connection
 $conn = null;
 ?>
