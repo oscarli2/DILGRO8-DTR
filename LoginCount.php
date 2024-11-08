@@ -47,7 +47,7 @@
                 .catch(error => console.error('Error fetching employee data:', error));
         }
 
-        // Refresh count and employee data every 5 seconds
+        // Refresh count and employee data every 5 seconds asdasdas
         setInterval(updateCount, 5000);
         window.onload = updateCount;
     </script>
