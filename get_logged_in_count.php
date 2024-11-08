@@ -13,13 +13,13 @@ if ($conn->connect_error) {
 
 // Query to count employees with the latest record as Time-in (Checktype = 0)
 $sql = "
-    SELECT COUNT(DISTINCT emp.id) AS count
+    SELECT COUNT(DISTINCT Userid) AS count
     FROM Checkinout emp
     JOIN (
         SELECT id, MAX(Checktime) as LatestCheck
         FROM Checkinout
         GROUP BY id
-    ) latest ON emp.id = latest.id AND emp.Checktime = latest.LatestCheck
+    ) latest ON Userid = latest.id AND emp.Checktime = latest.LatestCheck
     WHERE emp.Checktype = 0;
 ";
 
