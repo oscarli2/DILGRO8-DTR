@@ -9,7 +9,7 @@ $password = "CDPabina";
 $dbname = "anviz";
 
 try {
-    $conn = new PDO("sqlsrv:Server=$host;Database=$dbname;Driver={ODBC Driver 17 for SQL Server}", $username, $password);
+    $conn = new PDO("sqlsrv:Server=$host;Database=$dbname;Driver={SQL Server}", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     echo json_encode(['status' => 'Connection successful']);
 } catch (PDOException $e) {
