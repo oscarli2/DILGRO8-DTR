@@ -1,9 +1,27 @@
 <?php
-include 'db_connection.php';
 
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+
+// Use any of these or check the exact MSSQL ODBC driver name in "ODBC Data Source Administrator"
+$mssqldriver = '{ODBC Driver 11 for SQL Server}';
+
+$hostname = '172.20.72.124';
+$dbname = 'anviz';
+$username = 'sa';
+$password = 'CDPabina';
+
+try {
+    $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);
+    // Set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // If connection is successful, output a success message
+    echo json_encode(['status' => 'Connection successful']);
+} catch(PDOException $e) {
+    // Output error if connection fails
+    echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+}
 
 // Database connection using PDO for SQL Server
 // Rest of the code follows...
