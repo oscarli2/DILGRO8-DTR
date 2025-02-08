@@ -3,76 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Login Count</title>
+    <title>Employee Login Tracker</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .container { width: 80%; margin: 0 auto; padding: 20px; text-align: center; }
-        h2 { color: #333; }
-        table { width: 100%; margin-top: 20px; border-collapse: collapse; }
-        table, th, td { border: 1px solid #ddd; }
-        th, td { padding: 10px; text-align: left; }
-        th { background-color: #f2f2f2; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .total-count {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .filter-container {
+            margin-bottom: 20px;
+        }
+        .table-container {
+            width: 100%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Logged-In Employees</h2>
-        <p>Total Employees Logged In: <span id="loggedInCount">0</span></p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Employee Name</th>
-                    <th>Department</th>
-                </tr>
-            </thead>
-            <tbody id="employeeTableBody">
-                <!-- Employee data will be inserted here -->
-            </tbody>
-        </table>
+
+    <h1>Employee Login Tracker</h1>
+    <div class="total-count" id="total-count">Total Employees Logged In: 0</div>
+
+    <div class="filter-container">
+        <label for="department-select">Filter by Department:</label>
+        <select id="department-select" onchange="filterByDepartment()">
+            <option value="">--All Departments--</option>
+            <?php
+            try {
+                $host = "172.20.72.124";
+                $username = "sa";
+                $password = "CDPabina";
+                $dbname = "anviz";
+                $mssqldriver = '{ODBC Driver 11 for SQL Server}';
+
+                $conn = new PDO("odbc:Driver=$mssqldriver;Server=$host;Database=$dbname", $username, $password);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // Get departments
+                $deptSql = "SELECT Deptid, DeptName FROM Dept";
+                $deptStmt = $conn->query($deptSql);
+                $departments = $deptStmt->fetchAll(PDO::FETCH_ASSOC);
+
+                foreach ($departments as $dept) {
+                    echo "<option value='" . htmlspecialchars($dept['Deptid']) . "'>" . htmlspecialchars($dept['DeptName']) . "</option>";
+                }
+
+            } catch (PDOException $e) {
+                echo "<p>Error: Could not fetch departments. " . $e->getMessage() . "</p>";
+                exit();
+            }
+            ?>
+        </select>
+    </div>
+
+    <div class="table-container" id="employeeData">
+        <!-- The employee data table will be loaded here -->
     </div>
 
     <script>
-        // Function to fetch the employee login count and details
-        function updateCount() {
-            fetch('get_logged_in_count.php')
+        // Refreshes the content every 5 seconds
+        let autoRefresh = setInterval(fetchEmployees, 5000);
+
+        function fetchEmployees(department = '') {
+            fetch(`get_logged_in_count.php?department=${encodeURIComponent(department)}`)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.error) {
-                        console.error('Error from PHP:', data.error);
-                        alert('Error fetching employee data. Please try again later.');
-                        return;
-                    }
-
-                    document.getElementById('loggedInCount').innerText = data.count;
-
-                    const tableBody = document.getElementById('employeeTableBody');
-                    tableBody.innerHTML = '';
-
-                    data.employees.forEach(employee => {
-                        const row = document.createElement('tr');
-                        const nameCell = document.createElement('td');
-                        nameCell.textContent = employee.name;
-                        row.appendChild(nameCell);
-
-                        const deptCell = document.createElement('td');
-                        deptCell.textContent = employee.department;
-                        row.appendChild(deptCell);
-
-                        tableBody.appendChild(row);
-                    });
+                    document.getElementById('employeeData').innerHTML = data.tableHtml;
+                    document.getElementById('total-count').textContent = `Total Employees Logged In: ${data.totalCount}`;
                 })
-                .catch(error => {
-                    console.error('Error fetching employee data:', error);
-                    alert('Error fetching employee data. Please try again later.');
-                });
+                .catch(error => console.error('Error fetching employee data:', error));
         }
 
-        // Initial call to fetch data on page load
-        updateCount();
+        // Filter employees by department selection
+        function filterByDepartment() {
+            const department = document.getElementById('department-select').value;
 
-        // Optionally, you can set an interval to refresh the data every few seconds
-        setInterval(updateCount, 30000); // Refresh every 30 seconds
+            if (department) {
+                clearInterval(autoRefresh);
+                fetchEmployees(department);
+            } else {
+                autoRefresh = setInterval(fetchEmployees, 5000);
+                fetchEmployees();
+            }
+        }
+
+        // Initial fetch to populate the table
+        fetchEmployees();
     </script>
+
 </body>
 </html>

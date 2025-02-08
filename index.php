@@ -24,7 +24,7 @@
             <h1>View Attendance Records</h1>    
             <div class="logout-form"> 
                 <form method="POST" action="logout.php">
-                    <input class="logout-button" type="submit" value="Logout">
+                    <input class="logout-button" type ="submit" value="Logout">
                 </form>
                 <button onclick="window.print()">Print</button>
             </div>   

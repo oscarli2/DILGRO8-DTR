@@ -70,7 +70,7 @@
                 </form>
             </div>
             <div class="insert-form-container">
-                <h2>Insert Attendance Record</h2>
+                <h2>--</h2>
                 <form method="POST" action="insert_record.php">
                     <label for="insert_user_id">Employee:</label>
                     <select id="insert_user_id" name="insert_user_id" required>
