@@ -61,6 +61,8 @@
             }
         }
         ?>
+        
+        <h5><a href='forgot_password.php' target="_blank" rel="noopener noreferrer">Forgot your Password? Click Here!</a></h5>
     </div>
 </body>
 </html>

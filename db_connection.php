@@ -6,8 +6,6 @@ $hostname = '26.113.153.103';
 $dbname = 'anviz';
 $username = 'sa';
 $password = 'CDPabina';
-$email = 'ocoballo@dilg.gov.ph';
-$emailpass = 'MarjDiaz01$';
 
 try {
     $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);
