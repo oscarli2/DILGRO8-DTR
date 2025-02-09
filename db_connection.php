@@ -2,10 +2,12 @@
 // Use any of these or check the exact MSSQL ODBC driver name in "ODBC Data Source Administrator"
 $mssqldriver = '{ODBC Driver 11 for SQL Server}';
 
-$hostname = '172.20.72.124';
+$hostname = '26.113.153.103';
 $dbname = 'anviz';
 $username = 'sa';
 $password = 'CDPabina';
+$email = 'ocoballo@dilg.gov.ph';
+$emailpass = 'MarjDiaz01$';
 
 try {
     $conn = new PDO("odbc:Driver=$mssqldriver;Server=$hostname;Database=$dbname", $username, $password);

@@ -79,6 +79,10 @@ input[type="submit"]#reg:hover {
     background: #025aa5;
 }
 
+#reg{
+    background: #dbba00
+}
+
 /* Link styling */
 a {
     text-decoration: none;
