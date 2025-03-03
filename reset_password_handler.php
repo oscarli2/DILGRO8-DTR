@@ -14,7 +14,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':expiry_time', $expiry_time, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
         // Update the user's password in the database

@@ -140,7 +140,7 @@
 
                                         if (confirmResponse.success) {
                                             swal("Success!", "Password reset link has been sent to your email.", "success").then(() => {
-                                                window.location.href = "login.php";
+                                                window.location.href = "reset_password_handler.php";
                                             });
                                         } else {
                                             swal("Error!", "Failed to send reset link. " + confirmResponse.message, "error");
