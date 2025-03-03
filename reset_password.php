@@ -105,7 +105,8 @@
         </form>
     <div>
     <?php
-    
+        
+        include 'db_connection.php';
         $stmt = $conn->prepare("SELECT * FROM Userinfo WHERE Address = :email");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
