@@ -104,17 +104,5 @@
             <input type="submit" value="Reset Password">
         </form>
     <div>
-    <?php
-        
-        include 'db_connection.php';
-        $stmt = $conn->prepare("SELECT * FROM Userinfo WHERE Address = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        $user1 = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if ($user1) {
-            $email = $user1['email'];
-        }
-    ?>
 </body>
 </html>

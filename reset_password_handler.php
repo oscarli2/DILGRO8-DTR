@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
      // Calculate the expiration time (1 hour from now)
     $expiry_time = date('Y-m-d H:i:s', strtotime('+1 hour'));
      // Store the token in the database with an expiration time
-    $stmt = $conn->prepare("UPDATE Userinfo SET Nation = :token, Birthday = :expiry_time WHERE Address = :email");
+    $stmt = $conn->prepare("UPDATE Userinfo SET Remark = :token, Birthday = :expiry_time WHERE Address = :email");
     $stmt->bindParam(':token', $token, PDO::PARAM_STR);
     $stmt->bindParam(':expiry_time', $expiry_time, PDO::PARAM_STR);
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($user) {
         // Update the user's password in the database
-        $stmt = $conn->prepare("UPDATE Userinfo SET Pwd = :password, Nation = NULL, Birthday = NULL WHERE reset_token = :token");
+        $stmt = $conn->prepare("UPDATE Userinfo SET Pwd = :password, Remark = NULL, Birthday = NULL WHERE Remark = :token");
         $stmt->bindParam(':password', $new_password, PDO::PARAM_STR);
         $stmt->bindParam(':token', $token, PDO::PARAM_STR);
         $stmt->execute();
