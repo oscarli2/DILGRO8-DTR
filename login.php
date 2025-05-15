@@ -47,7 +47,7 @@
                 } else {
                     // Check if user record exists and verify password
                     if ($user && $user['Pwd'] === $password) {
-                        $_SESSION['userid'] = $userid;
+                        $_SESSION['userid'] = $user['Userid'];
                         $_SESSION['admin'] = $user['admingroupid'];
                         $_SESSION['email'] = $user['Address']; // Assuming the email is stored in the 'Email' field
                         echo '<script>swal("Success!", "Login successful!", "success").then(() => {
