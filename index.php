@@ -29,6 +29,9 @@
                     <input class="logout-button" type ="submit" value="Logout">
                 </form>
                 <button class="dtrprint" onclick="window.print()">Print</button>
+                <form method="POST" action="profile.php">
+                    <input class="profile" type ="submit" value="Profile">
+                </form>
             </div>   
         </div>
         <div class="container">

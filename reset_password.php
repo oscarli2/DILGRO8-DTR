@@ -99,6 +99,7 @@
         <h1>Reset Password</h1>
         <form method="POST" action="reset_password_handler.php">
             <input type="hidden" name="token" value="<?php echo $_GET['token']; ?>">
+            <input type="text" name="email" value ="<?php echo $_GET['email']; ?>" readonly>
             <label for="password">New Password:</label>
             <input type="password" id="password" name="password" required>
             <input type="submit" value="Reset Password">

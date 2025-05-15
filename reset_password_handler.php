@@ -15,18 +15,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bindParam(':email', $email, PDO::PARAM_STR);
     $stmt->execute();
 
-    if ($user) {
+    if ($email) {
         // Update the user's password in the database
         $stmt = $conn->prepare("UPDATE Userinfo SET Pwd = :password, Remark = NULL, Birthday = NULL WHERE Remark = :token");
         $stmt->bindParam(':password', $new_password, PDO::PARAM_STR);
         $stmt->bindParam(':token', $token, PDO::PARAM_STR);
         $stmt->execute();
 
-        echo '<script>swal("Success!", "Your password has been reset.", "success").then(() => {
-            window.location.href = "login.php";
-        });</script>';
+        echo '<script>
+            alert("Password has been reset! You may now login!");
+            window.location.href = "login.php";</script>';
     } else {
-        echo '<script>swal("Error!", "Invalid or expired token!", "error");</script>';
+        echo 'alert("Error! Invalid or Expired Token!");</script>';
     }
 }
 ?>

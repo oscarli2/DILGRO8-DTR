@@ -25,6 +25,7 @@ $sql = "
             emp.Checktype,
             ROW_NUMBER() OVER (PARTITION BY emp.Userid ORDER BY emp.Checktime DESC) AS rn
         FROM Checkinout emp
+        WHERE CAST(emp.Checktime AS DATE) = CAST(GETDATE() AS DATE) -- Only include records for today
     )
     SELECT 
         u.Name AS employee_name,
@@ -33,6 +34,7 @@ $sql = "
     JOIN Userinfo u ON lc.Userid = u.Userid
     LEFT JOIN Dept d ON u.Deptid = d.Deptid
     WHERE lc.Checktype = 0 AND lc.rn = 1
+
 ";
 
 if ($deptId != '') {
@@ -41,7 +43,7 @@ if ($deptId != '') {
 
 try {
     $stmt = $conn->prepare($sql);
-
+   
     if ($deptId != '') {
         $stmt->bindParam(':deptId', $deptId, PDO::PARAM_INT);
     }

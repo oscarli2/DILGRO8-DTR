@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($user) {
         // Generate a unique password reset token
         $token = bin2hex(random_bytes(50));
-        $reset_link = "localhost/DILGRO8-DTR/reset_password.php?token=" . $token;
+        $reset_link = "26.93.45.191/reset_password.php?token=" . $token . "&email=" . $email . "";
 
         // Calculate the expiration time (1 hour from now)
         $expiry_time = date('Y-m-d H:i:s', strtotime('+1 hour'));

@@ -14,7 +14,7 @@
         <h1>Attendance Viewer System</h1>
         <h6>DILG Region 8 | RICTU</h6>
         <form method="POST" action="login.php">
-            <label for="userid">User ID:</label>
+            <label for="userid">Email/User ID:</label>
             <input type="text" id="userid" name="userid" required>  
 
             <label for="password">Password:</label>
@@ -34,8 +34,9 @@
             
             try {
                 // Prepare the SQL statement
-                $stmt = $conn->prepare("SELECT * FROM Userinfo WHERE Userid = :userid");
+                $stmt = $conn->prepare("SELECT * FROM Userinfo WHERE Userid = :userid OR Address = :email");
                 $stmt->bindParam(':userid', $userid, PDO::PARAM_STR);
+                $stmt->bindParam(':email', $userid, PDO::PARAM_STR);
                 $stmt->execute();
                 
                 // Fetch the user record
@@ -63,6 +64,7 @@
         ?>
         
         <h5><a href='forgot_password.php' target="_blank" rel="noopener noreferrer">Forgot your Password? Click Here!</a></h5>
+        <h4><a href='https://download.radmin-vpn.com/download/files/Radmin_VPN_1.4.4642.1.exe' target="_blank" rel="noopener noreferrer">Download RadminVPN Here</a></h4>
     </div>
 </body>
 </html>
